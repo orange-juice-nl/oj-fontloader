@@ -1,0 +1,18 @@
+{
+  "name": "oj-fontloader",
+  "version": "4.0.4",
+  "description": "FontLoader (Google & Custom) methods",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc ./src/index.ts --lib esnext,dom --declaration true --outDir ./dist --module commonjs --moduleResolution node --target es5",
+    "share": "npm upgrade && npm version patch && npm run build && npm publish --registry http://web01.oj.local:3000"
+  },
+  "keywords": [],
+  "author": "Marius Linders @ Orange Juice<marius.linders@orange-juice.nl>",
+  "license": "ISC",
+  "dependencies": {
+    "oj-ajax": "^4.0.3",
+    "oj-event": "^4.0.3"
+  }
+}
