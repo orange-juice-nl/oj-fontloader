@@ -1,6 +1,6 @@
 {
   "name": "oj-fontloader",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FontLoader (Google & Custom) methods",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,7 @@
   "author": "Marius Linders @ Orange Juice<marius.linders@orange-juice.nl>",
   "license": "MIT",
   "dependencies": {
-    "oj-ajax": "^1.0.0",
-    "oj-event": "^1.0.0"
+    "oj-ajax": "^1.0.1",
+    "oj-event": "^1.0.1"
   }
 }
