@@ -1,11 +1,14 @@
 {
   "name": "oj-fontloader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/orange-juice-nl/oj-fontloader.git"
+    "type": "git",
+    "url": "https://github.com/orange-juice-nl/oj-fontloader.git"
   },
-  "keywords": ["font", "google"],
+  "keywords": [
+    "font",
+    "google"
+  ],
   "description": "FontLoader (Google & Custom) methods",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +19,7 @@
   "author": "Marius Linders @ Orange Juice<marius.linders@orange-juice.nl>",
   "license": "MIT",
   "dependencies": {
-    "oj-ajax": "^1.0.1",
-    "oj-event": "^1.0.1"
+    "oj-ajax": "^1.0.2",
+    "oj-event": "^1.0.2"
   }
 }
