@@ -1,6 +1,6 @@
 {
   "name": "oj-fontloader",
-  "version": "1.0.2",
+  "version": "6.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/orange-juice-nl/oj-fontloader.git"
@@ -17,9 +17,5 @@
     "share": "npm upgrade && npm version patch -force && npm run build && npm publish --registry https://registry.npmjs.org"
   },
   "author": "Marius Linders @ Orange Juice<marius.linders@orange-juice.nl>",
-  "license": "MIT",
-  "dependencies": {
-    "oj-ajax": "^1.0.2",
-    "oj-event": "^1.0.2"
-  }
+  "license": "MIT"
 }

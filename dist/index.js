@@ -36,132 +36,80 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("oj-event");
-var oj_ajax_1 = require("oj-ajax");
-var FontLoader = /** @class */ (function () {
-    function FontLoader() {
-    }
-    FontLoader.isLoaded = function (name) {
-        return FontLoader.loaded[name] === true;
-    };
-    FontLoader.loadCustomFont = function (name, url, i) {
-        if (i === void 0) { i = 0; }
-        return __awaiter(this, void 0, void 0, function () {
-            var file, s;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (FontLoader.loaded[name] !== undefined)
-                            return [2 /*return*/, name];
-                        FontLoader.loaded[name] = false;
-                        return [4 /*yield*/, oj_ajax_1.get(url, { responseType: "blob" })];
-                    case 1:
-                        file = _a.sent();
-                        s = document.createElement('style');
-                        s.setAttribute("type", "text/css");
-                        s.appendChild(document.createTextNode("@font-face { font-family: '" + name + "'; src: url('" + URL.createObjectURL(file) + "'); style: 'normal'; weight: 400; }"));
-                        document.head.appendChild(s);
-                        return [4 /*yield*/, FontLoader.renderOnBody(name, i * 10).then(function () { return FontLoader.loaded[name] = true; })];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/, name];
-                }
-            });
-        });
-    };
-    FontLoader.renderOnBody = function (fontFamily, top, left) {
-        if (top === void 0) { top = 0; }
-        if (left === void 0) { left = 0; }
-        //HACK to load fontfamily before canvas render
-        var temp = document.createElement("div");
-        temp.classList.add("font-test");
-        var tempImg = document.createElement("img");
-        var tempSpan = document.createElement("span");
-        tempSpan.style.fontFamily = "\"" + fontFamily + "\"";
-        tempSpan.innerText = fontFamily;
-        temp.appendChild(tempSpan);
-        temp.appendChild(tempImg);
-        temp.style.position = "fixed";
-        temp.style.left = left + "px";
-        temp.style.top = top + "px";
-        document.body.appendChild(temp);
-        var p = new Promise(function (res) {
-            return tempImg.on("load", function (e) {
-                setTimeout(function () { return document.body.removeChild(temp); }, 100);
+exports.loadFonts = exports.loadFont = exports.getFontUrl = exports.isFontLoaded = void 0;
+var loaded = {};
+var isFontLoaded = function (name) {
+    return loaded[name] === true;
+};
+exports.isFontLoaded = isFontLoaded;
+var renderOnBody = function (fontFamily, top, left) {
+    if (top === void 0) { top = 0; }
+    if (left === void 0) { left = 0; }
+    //HACK to load fontfamily before canvas render
+    var temp = document.createElement("div");
+    temp.classList.add("font-test");
+    var tempImg = document.createElement("img");
+    var tempSpan = document.createElement("span");
+    tempSpan.style.fontFamily = "\"" + fontFamily + "\"";
+    tempSpan.innerText = fontFamily;
+    temp.appendChild(tempSpan);
+    temp.appendChild(tempImg);
+    temp.style.position = "fixed";
+    temp.style.left = "".concat(left, "px");
+    temp.style.top = "".concat(top, "px");
+    document.body.appendChild(temp);
+    var p = new Promise(function (res) {
+        return tempImg.addEventListener("load", function () {
+            return setTimeout(function () {
+                document.body.removeChild(temp);
                 res();
-            });
+            }, 100);
         });
-        tempImg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-        return p;
-    };
-    FontLoader.loadCustomFonts = function (families) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/, Promise.all(families.filter(function (item, i, ar) {
-                        return ar.findIndex(function (x) { return x.name === item.name; }) === i;
-                    }).map(function (x, i) {
-                        return FontLoader.loadCustomFont(x.name, x.url, i);
-                    }))];
-            });
+    });
+    tempImg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+    return p;
+};
+var load = function (name, weights) {
+    if (weights === void 0) { weights = []; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var css, style;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, fetch((0, exports.getFontUrl)(name, weights)).then(function (x) { return x.text(); })];
+                case 1:
+                    css = _a.sent();
+                    style = document.createElement("style");
+                    style.setAttribute("type", "text/css");
+                    style.appendChild(document.createTextNode(css));
+                    document.head.appendChild(style);
+                    return [4 /*yield*/, renderOnBody(name)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
         });
-    };
-    FontLoader.loadGoogleFont = function (name, weights) {
-        if (weights === void 0) { weights = []; }
-        return __awaiter(this, void 0, void 0, function () {
-            var nameStr, weightStr, res, s;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (FontLoader.loaded[name] !== undefined)
-                            return [2 /*return*/, name];
-                        FontLoader.loaded[name] = false;
-                        nameStr = name.replace(/\s/g, "+");
-                        weightStr = weights.length > 0 ? ":" + weights.join(",") : "";
-                        return [4 /*yield*/, oj_ajax_1.get("https://fonts.googleapis.com/css?family=" + nameStr + weightStr)];
-                    case 1:
-                        res = _a.sent();
-                        if (typeof res !== "string")
-                            throw new Error("failed to load " + name);
-                        s = document.createElement('style');
-                        s.setAttribute("type", "text/css");
-                        s.appendChild(document.createTextNode(res));
-                        document.head.appendChild(s);
-                        return [4 /*yield*/, FontLoader.renderOnBody(name).then(function () {
-                                return FontLoader.loaded[name] = true;
-                            })];
-                    case 2:
-                        _a.sent();
-                        return [2 /*return*/, name];
-                }
-            });
-        });
-    };
-    FontLoader.loadGoogleFonts = function (families) {
-        return __awaiter(this, void 0, void 0, function () {
-            var succeeded, failed;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        succeeded = [];
-                        failed = [];
-                        return [4 /*yield*/, Promise.all(families.map(function (x) {
-                                return _this.loadGoogleFont(x.name, x.weights)
-                                    .then(function () {
-                                    return succeeded.push(x.name);
-                                })
-                                    .catch(function () {
-                                    return failed.push(x.name);
-                                });
-                            }))];
-                    case 1:
-                        _a.sent();
-                        return [2 /*return*/, [succeeded, failed]];
-                }
-            });
-        });
-    };
-    FontLoader.loaded = {};
-    return FontLoader;
-}());
-exports.default = FontLoader;
+    });
+};
+var getFontUrl = function (name, weights) {
+    if (weights === void 0) { weights = []; }
+    var nameStr = name.replace(/\s/g, "+");
+    var weightStr = weights.length > 0 ? ":".concat(weights.join(",")) : "";
+    return "https://fonts.googleapis.com/css?family=".concat(nameStr).concat(weightStr);
+};
+exports.getFontUrl = getFontUrl;
+var loadFont = function (name, weights) {
+    if (weights === void 0) { weights = []; }
+    if (!loaded[name]) {
+        var p = load(name, weights);
+        loaded[name] = p;
+        p.finally(function () { return loaded[name] = true; });
+    }
+    return loaded[name] === true
+        ? Promise.resolve()
+        : loaded[name];
+};
+exports.loadFont = loadFont;
+var loadFonts = function (families) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
+    return [2 /*return*/, Promise.all(families.map(function (x) { return (0, exports.loadFont)(x.name, x.weights); }))];
+}); }); };
+exports.loadFonts = loadFonts;
